@@ -15,7 +15,7 @@ export default function Home() {
       <main className="flex-1">
 
         {/* hero section */}
-        <section className="relative overflow-hidden bg-background py-20 lg:py-32">
+        <section className="relative overflow-hidden bg-background py-20 lg:py-32 max-w-10/12 mx-auto">
 
           <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -86,7 +86,7 @@ export default function Home() {
 
 
          {/* Learning Paths */}
-        <section className="py-24">
+        <section className="py-24 max-w-10/12 mx-auto">
           <div className="container mx-auto px-4">
               <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl text-center">Choose Your Learning Path</h2>
               <p className="mx-auto mb-16 max-w-2xl text-lg text-muted-foreground text-center">
@@ -110,7 +110,7 @@ export default function Home() {
 
 
         {/* Feature Section */}
-        <section className="bg-muted/30 py-24">
+        <section className="bg-muted/30 py-24 max-w-10/12 mx-auto">
 
           <div className="container mx-auto px-4">
             <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
@@ -148,7 +148,7 @@ export default function Home() {
 
 
          {/* Final CTA */}
-        <section className="py-24">
+        <section className="py-24 max-w-10/12 mx-auto">
           <div className="container mx-auto px-4">
             <div className="rounded-3xl px-8 py-16 text-center bg-[#F9C505] md:px-16 md:py-24">
               <h2 className="mb-6 text-3xl font-bold tracking-tight sm:text-5xl text-white">Ready to transform your career?</h2>
@@ -168,7 +168,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-
+        
       </main>
     </div>
   );
