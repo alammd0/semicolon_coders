@@ -6,9 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "tsx utils/seed.ts"
   },
   "dependencies": {
+    "@editorjs/code": "^2.9.4",
+    "@editorjs/editorjs": "^2.31.1",
+    "@editorjs/header": "^2.8.8",
+    "@editorjs/image": "^2.10.3",
+    "@editorjs/link": "^2.6.2",
+    "@editorjs/list": "^2.0.9",
+    "@editorjs/paragraph": "^2.11.7",
+    "@editorjs/quote": "^2.7.6",
+    "@editorjs/table": "^2.4.5",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "7",
     "axios": "^1.13.2",
@@ -18,13 +28,18 @@
     "lucide": "^0.562.0",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
+    "nodemailer": "^7.0.12",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-otp-input": "^3.1.1",
+    "react-toastify": "^11.0.5",
+    "reactjs-otp-input": "^2.0.10"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
+    "@types/nodemailer": "^7.0.4",
     "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",

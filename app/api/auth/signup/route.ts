@@ -2,13 +2,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { data } from "react-router-dom";
+import { sendEmail } from "@/utils/SendEmail";
+import { otpEmailTemplate } from "@/lib/emailTemplates/otpEmail";
 
 export async function POST(request: Request, response: Response) {
     try {
         const { email, password, firstName, lastName } = await request.json();
-
-        console.log(email, password, firstName, lastName);
 
         if (!email || !password || !firstName || !lastName) {
             return NextResponse.json({
@@ -34,23 +33,29 @@ export async function POST(request: Request, response: Response) {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await prisma.user.create({
+
+        // create OTP for user  -> 6 digits
+        const otp  = Math.floor(100000 + Math.random() * 900000).toString();
+
+        const otpExpiry = new Date(new Date().getTime() + 10 * 60 * 1000);
+        
+        await prisma.user.create({
             data: {
                 email: email,
                 password: hashedPassword,
                 firstName: firstName,
                 lastName: lastName,
+                otp: otp,
+                expiresAt: otpExpiry,
+                isVerified: false
             },
         });
 
+        await sendEmail(email, "Verify your email", otpEmailTemplate(otp));
+
         return NextResponse.json({
-            message: "User created successfully",
-            data : {
-                id : newUser.id,
-                email : newUser.email,
-                firstName : newUser.firstName,
-                lastName : newUser.lastName
-            }
+            message: "OTP sent successfully, Please check your email",
+            otp : otp
         }, {
             status: 201,
         });
@@ -64,3 +69,4 @@ export async function POST(request: Request, response: Response) {
         })
     }
 }
+

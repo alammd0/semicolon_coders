@@ -1,9 +1,36 @@
 
 import { NavbarData } from "@/data/Navbar"
+import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
+import jwt from "jsonwebtoken";
+import ProfileDropdown from "./ProfileDropdown";
 
-export default function Navbar() {
+interface User {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    iat: number;
+    exp: number;
+}
+
+export default async function Navbar() {
+
+    const token = (await cookies()).get("token")?.value ;
+
+    let user: User | null = null;
+
+    if(token){
+        try{
+            const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string) as User;
+            user = decodedToken;
+        }   
+        catch(error){
+            user = null
+        }
+    }
+
     return (
         <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -30,15 +57,21 @@ export default function Navbar() {
                         }
                     </div>
 
-                    {/* 3. Singup and Login */}
-                     <div className="hidden items-center gap-3 md:flex">
-                        <button className="rounded-md py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600">
-                            <Link href="/login">Log In</Link>
-                        </button>
-                        <button className="bg-[#F9C505] rounded-md border py-2 px-4 text-center transition-all text-white text-sm shadow-sm hover:shadow-lg">
-                            <Link href="/signup">Start Learning Free</Link>
-                        </button>
-                    </div>
+                    {
+                        !user ?
+                            <div className="hidden items-center gap-3 md:flex">
+                                <button className="rounded-md py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600">
+                                    <Link href="/login">Log In</Link>
+                                </button>
+                                <button className="bg-[#F9C505] rounded-md border py-2 px-4 text-center transition-all text-white text-sm shadow-sm hover:shadow-lg">
+                                    <Link href="/signup">Start Learning Free</Link>
+                                </button>
+                            </div>
+                         : 
+                            <div className="hidden items-center gap-3 md:flex">
+                                <ProfileDropdown user={user} />
+                            </div>
+                    }
 
                 </div>
             </div>

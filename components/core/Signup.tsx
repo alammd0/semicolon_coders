@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 
 const features = [
@@ -17,46 +19,67 @@ const features = [
 
 export default function SignupPage() {
 
+    const router = useRouter();
+
+    const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+    });
+
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    }
 
 
-  const [formData, setFormData] = useState({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-  });
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(formData);
 
-  const [loading, setLoading] = useState(false);
+        try{
+            setLoading(true);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData({
-          ...formData,
-          [e.target.name]: e.target.value,
-      });
-  }
+            const response = await axios.post("/api/auth/signup", {
+                email : formData.email,
+                password : formData.password,
+                firstName : formData.firstName,
+                lastName : formData.lastName
+            })
 
+            if(response.status === 201){
+                toast.success(response.data.message);
+                router.push("/verify");
+                setLoading(false);
+            }else{
+                toast.error(response.data.message);
+                setLoading(false);
+            }
+        }
+        catch(error){
+            console.log(error);
+            toast.error("Something went wrong");
+            setLoading(false);
+        }
+    }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      console.log(formData);
-
-      try{
-          setLoading(true);
-          const response = await axios.post("/api/auth/signup", {
-              email : formData.email,
-              password : formData.password,
-              firstName : formData.firstName,
-              lastName : formData.lastName
-          })
-
-          console.log(response.data);
-          setLoading(false);
-      }
-      catch(error){
-          console.log(error);
-      }
-  }
-
+    if(loading){
+        return (
+        <div className="min-h-screen flex items-center justify-center">
+            <div className="w-full max-w-md space-y-4 rounded-lg bg-background p-6 shadow-md">
+            <div className="text-center">
+                <h1 className="text-3xl font-bold">Creating your account</h1>
+                <p className="mt-2 text-muted-foreground">Please wait while we create your account</p>
+            </div>
+            </div>
+        </div>
+        )
+    }
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">

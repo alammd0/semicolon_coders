@@ -35,6 +35,14 @@ export async function POST(request: Request, response: Response) {
             })
         }
 
+        if(!user.isVerified){
+            return NextResponse.json({
+                message : "Please verify your email first"
+            }, {
+                status : 400
+            })
+        }
+
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
         if(!isPasswordCorrect){
@@ -48,33 +56,31 @@ export async function POST(request: Request, response: Response) {
         const payload = {
             id : user.id,
             email : user.email,
-            firstName : user.firstName
+            firstName : user.firstName,
+            role : user.role
         }
 
         const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
             expiresIn : "1h"
         })
 
-
-
-        if(!user){
-            return NextResponse.json({
-                message : "Please provide valid email and password"
-            }, {
-                status : 400
-            })
-        }
-
-
-        return NextResponse.json({
+        const response = NextResponse.json({
             message : "Login successful",
-            data : {
-                token : token
-            }
         }, {
             status : 200
-        })
+        });
+
+        response.cookies.set("token", token, {
+            httpOnly : true,
+            secure : process.env.NODE_ENV === "production",
+            sameSite : "strict",
+            path : "/",
+            maxAge : 60 * 60 * 24 * 30
+        });
+
+        return response;
     }
+
     catch(error){
         return NextResponse.json({
             error : error,
