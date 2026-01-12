@@ -1,35 +1,15 @@
-
 import { NavbarData } from "@/data/Navbar"
-import { cookies } from "next/headers"
 import Image from "next/image"
 import Link from "next/link"
-import jwt from "jsonwebtoken";
 import ProfileDropdown from "./ProfileDropdown";
-
-interface User {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    iat: number;
-    exp: number;
-}
+import { decoded } from "@/utils/decoded";
+import { User } from "@/utils/type";
 
 export default async function Navbar() {
 
-    const token = (await cookies()).get("token")?.value ;
+    const user : User | null = await decoded();
 
-    let user: User | null = null;
-
-    if(token){
-        try{
-            const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string) as User;
-            user = decodedToken;
-        }   
-        catch(error){
-            user = null
-        }
-    }
+    const isActive = (path: string) => typeof window !== "undefined" && window.location.pathname === path
 
     return (
         <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -48,7 +28,7 @@ export default async function Navbar() {
                     <div className="hidden items-center gap-8 md:flex">
                         {
                             NavbarData.map((item) => (
-                                <Link className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground" href={item.link || "/"} key={item.id}>
+                                <Link className={`${isActive(item.link) ? "text-[#F9C505] font-semibold" : "text-muted-foreground hover:text-foreground"} text-sm font-medium transition-colors`} href={item.link || "/"} key={item.id}>
                                     {
                                         item.label
                                     }
@@ -69,13 +49,12 @@ export default async function Navbar() {
                             </div>
                          : 
                             <div className="hidden items-center gap-3 md:flex">
-                                <ProfileDropdown user={user} />
+                                <ProfileDropdown user={user as User}/>
                             </div>
                     }
 
                 </div>
             </div>
-        </nav>
-       
+        </nav>  
     )
 }

@@ -1,5 +1,3 @@
-import { link } from "fs";
-
 export const NavbarData = [
     {
         id : 1,

@@ -1,8 +1,43 @@
+"use client";
+
+import CardSection from "@/components/common/blog/CardSection";
 import { Plus, Search } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 
 export default function BlogPage(){
+
+    const [blogs, setBlogs] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try{
+
+                const response = await fetch("/api/blog", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+
+                const data = await response.json();
+
+                if(data.message === "Blogs fetched successfully"){
+                    setBlogs(data.blogs);
+                }
+                else{
+                    console.error("Error fetching data:", data.message);
+                }
+            }
+            catch(error){
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        fetchData();
+    }, []);
+
     return (
        <div className="mx-auto max-w-12xl sm:px-2 lg:px-2">
             <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -26,6 +61,9 @@ export default function BlogPage(){
 
             {/* Here Implement the Blogs List */}
             {/* Card Section */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <CardSection blogs={blogs}/>
+            </div>
        </div>
     )
 }

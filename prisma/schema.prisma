@@ -30,7 +30,7 @@ model Blog {
   title       String
   slug        String   @unique
   excerpt     String?
-  content     Json     
+  content     Json
 
   coverImage  String? 
 
@@ -51,10 +51,9 @@ model Blog {
 
 model Tag {
   id        Int    @id @default(autoincrement())
-  name      String
+  name      String @unique
 
-  blogId    String
-  blog      Blog   @relation(fields: [blogId], references: [id])
+  blog      Blog[]  
 }
 
 // 2. Course 

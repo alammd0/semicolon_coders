@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation";
 import jwt from "jsonwebtoken"
 
 
-export default  async function DashboardLayout({ children } : { children: React.ReactNode }) {
+
+export default function DashboardLayout({ children } : { children: React.ReactNode }) {
 
     const pathname = usePathname();
 
