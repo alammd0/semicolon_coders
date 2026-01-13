@@ -4,7 +4,6 @@ import { decoded } from "@/utils/decoded";
 import { NextResponse } from "next/server";
 import slugify from "slugify";
 
-
 // Get all blogs
 export async function GET(request: Request, response: Response) {
     try{
