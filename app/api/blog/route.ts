@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import slugify from "slugify";
 
 // Get all blogs
-export async function GET(request: Request, response: Response) {
+export async function GET(request: Request) {
     try{
       const blogs = await prisma.blog.findMany();
 
@@ -35,11 +35,9 @@ export async function GET(request: Request, response: Response) {
 }
 
 // Create a new blog
-export async function POST(request: Request, response: Response) {  
+export async function POST(request: Request) {  
     try {
         const body = await request.json();
-
-        // console.log(body);.
 
         const user = await decoded();
 
@@ -72,10 +70,6 @@ export async function POST(request: Request, response: Response) {
             }
         });
 
-        console.log(existUser?.id);
-
-        console.log("Hit Here - 01")
-
         if(!existUser){
             return NextResponse.json({
                 message : "Please login first"
@@ -84,7 +78,13 @@ export async function POST(request: Request, response: Response) {
             })
         }
 
-        console.log("Hit Here - 02");
+        if(existUser.role !== "admin"){
+            return NextResponse.json({
+                message : "You are not authorized to create blog"
+            }, {
+                status : 401
+            })
+        }
 
         const blog = await prisma.blog.create({
             data :{

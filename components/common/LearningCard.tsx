@@ -26,7 +26,7 @@ export default function LearningCard({
             </div>
 
             <div>
-                <Link className="flex justify-between text-sm hover:bg-[#F9C505]/20 hover:text-foreground transition-all px-2 py-1 rounded-[2px] hover:scale-x-105" href={link}>
+                <Link className="flex justify-between text-sm hover:bg-[#F9C505]/20 hover:text-foreground transition-all px-2 py-1 rounded-md hover:scale-x-105" href={link}>
                     Explore Path
                     <ArrowRightIcon size={18}/>
                 </Link>

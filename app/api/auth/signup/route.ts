@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import { sendEmail } from "@/utils/SendEmail";
 import { otpEmailTemplate } from "@/lib/emailTemplates/otpEmail";
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: Request) {
     try {
         const { email, password, firstName, lastName } = await request.json();
 

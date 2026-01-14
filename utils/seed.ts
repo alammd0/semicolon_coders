@@ -11,7 +11,7 @@ async function main() {
             lastName : "Alam",
             email : "alam@example.com",
             password : password,
-            role : "user",
+            role : "admin",
             otp : "123456",
             isVerified : true
         }

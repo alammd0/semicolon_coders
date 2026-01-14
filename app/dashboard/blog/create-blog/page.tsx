@@ -1,21 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import EditorJS from "@editorjs/editorjs";
-import Header from "@editorjs/header";
-import Paragraph from "@editorjs/paragraph";
-import List from "@editorjs/list";
-import Code from "@editorjs/code";
-import Quote from "@editorjs/quote";
-import Table from "@editorjs/table";
-import ImageTool from "@editorjs/image";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import type EditorJS from "@editorjs/editorjs";
 
 
 export default function CreateBlogPage() {
 
-    const editorRef = useRef<EditorJS | null>(null)
+    const editorRef = useRef<InstanceType<typeof EditorJS> | null>(null)
     const [tagInput, setTagInput] = useState("")
     const [blogData, setBlogData] = useState({
         title: "",
@@ -26,33 +19,55 @@ export default function CreateBlogPage() {
         coverImage: "" as string,
     })
 
+    const [mounted, setMounted] = useState(false)
+
     const router = useRouter();
 
     const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState<Record<string, string>>({})
 
-    useEffect(() => {
-        if (!editorRef.current) {
-            editorRef.current = new EditorJS({
-            holder: "editorjs",
-            autofocus: true,
-            placeholder: "Start writing your blog...",
-            tools: {
-                header: Header,
-                paragraph: Paragraph,
-                list: List,
-                code: Code,
-                quote: Quote,
-                table: Table,
-                image: ImageTool,
-            },
-        })
-    }
+    useEffect( () => {
+        setMounted(true)
+    }, [])
 
-    return () => {
-        editorRef.current?.destroy()
-        editorRef.current = null
-    }}, [])
+    useEffect(() => {
+        if (!mounted || editorRef.current) return;
+
+        let editor ;
+
+        (
+            async () => {
+                const EditorJS = (await import("@editorjs/editorjs")).default;
+                const Header = (await import("@editorjs/header")).default;
+                const Paragraph = (await import("@editorjs/paragraph")).default;
+                const List = (await import("@editorjs/list")).default;
+                const Code = (await import("@editorjs/code")).default;
+                const Quote = (await import("@editorjs/quote")).default;
+                const Table = (await import("@editorjs/table")).default;
+                const ImageTool = (await import("@editorjs/image")).default;
+
+                editor = new EditorJS({
+                    holder: "editorjs",
+                    autofocus: true,
+                    placeholder: "Start writing your blog...",
+                    tools: {
+                        header: Header,
+                        paragraph: Paragraph,
+                        list: List,
+                        code: Code,
+                        quote: Quote,
+                        table: Table,
+                        image: ImageTool,
+                    },
+                });
+            }
+        )
+
+        return () => {
+            editorRef.current?.destroy()
+            editorRef.current = null
+        }
+    }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
@@ -144,7 +159,7 @@ export default function CreateBlogPage() {
         return Object.keys(newErrors).length === 0
     }
 
-      const handleSave = async () => {
+    const handleSave = async () => {
 
         if (!validateForm()) {
             return
@@ -189,7 +204,10 @@ export default function CreateBlogPage() {
             console.error("Error saving blog:", error)
             setErrors({ submit: "Failed to save blog. Please try again." })
             setIsLoading(false)
-        }
+    }}
+
+  if(!mounted){
+    return null
   }
 
   return (
@@ -225,7 +243,7 @@ export default function CreateBlogPage() {
                                 placeholder="Enter blog title"
                                 className= {errors.title ? "border-destructive w-full rounded-sm border px-2 py-2 text-sm focus:border-[#F9C505] focus:ring-2 focus:ring-[#F9C505]/20 focus:outline-none" : "w-full rounded-sm border border-gray-300 px-2 py-2 text-sm focus:border-[#F9C505] focus:ring-2 focus:ring-[#F9C505]/20 focus:outline-none"}
                             />
-                            {errors.title && <p className="text-sm text-destructive mt-1">{errors.title}</p>}
+                            {errors.title && <p className="text-sm text-red-800 mt-1">{errors.title}</p>}
                         </div>
 
                         <div>
@@ -241,7 +259,7 @@ export default function CreateBlogPage() {
                                 rows={5}
                                 className={ errors.excerpt ? "border-destructive w-full rounded-sm border px-2 py-2 text-sm focus:border-[#F9C505] focus:ring-2 focus:ring-[#F9C505]/20 focus:outline-none" : "w-full rounded-sm border border-gray-300 px-2 py-2 text-sm focus:border-[#F9C505] focus:ring-2 focus:ring-[#F9C505]/20 focus:outline-none"}
                             />
-                            {errors.excerpt && <p className="text-sm text-destructive mt-1">{errors.excerpt}</p>}
+                            {errors.excerpt && <p className="text-sm text-red-800 mt-1">{errors.excerpt}</p>}
                         </div>
                     </div>
                 </div>
@@ -269,7 +287,7 @@ export default function CreateBlogPage() {
                                     onChange={handleImageChange}
                                     className= {errors.coverImage ? "border-destructive w-full rounded-sm border px-2 py-2 text-sm focus:border-[#F9C505] focus:ring-2 focus:ring-[#F9C505]/20 focus:outline-none" : "w-full rounded-sm border border-gray-300 px-2 py-2 text-sm focus:border-[#F9C505] focus:ring-2 focus:ring-[#F9C505]/20 focus:outline-none"}
                                 />
-                                {errors.coverImage && <p className="text-sm text-destructive">{errors.coverImage}</p>}
+                                {errors.coverImage && <p className="text-sm text-red-800">{errors.coverImage}</p>}
                                 {blogData.coverImage && (
                                     <div className="relative w-full">
                                         <img
@@ -314,8 +332,8 @@ export default function CreateBlogPage() {
                                 onChange={handleChange}
                                 placeholder="SEO title (50-60 characters)"
                                 className={ errors.metaTitle ? "border-destructive w-full rounded-sm border px-2 py-2 text-sm focus:border-[#F9C505] focus:ring-2 focus:ring-[#F9C505]/20 focus:outline-none" : "w-full rounded-sm border border-gray-300 px-2 py-2 text-sm focus:border-[#F9C505] focus:ring-2 focus:ring-[#F9C505]/20 focus:outline-none"}
-                                />
-                                {errors.metaTitle && <p className="text-sm text-destructive mt-1">{errors.metaTitle}</p>}
+                            />
+                            {errors.metaTitle && <p className="text-sm text-red-800 mt-1">{errors.metaTitle}</p>}
                             </div>
 
                         <div>
@@ -374,7 +392,7 @@ export default function CreateBlogPage() {
                             </div>
                         )}
 
-                        {errors.tags && <p className="text-sm text-destructive">{errors.tags}</p>}
+                        {errors.tags && <p className="text-sm text-red-800">{errors.tags}</p>}
                     </div>
                 </div>
                     
@@ -392,7 +410,7 @@ export default function CreateBlogPage() {
                             id="editorjs"
                             className="prose prose-sm max-w-none dark:prose-invert rounded-md border border-border p-4 min-h-96"
                         />
-                        {errors.editor && <p className="text-sm text-destructive mt-2">{errors.editor}</p>}
+                        {errors.editor && <p className="text-sm text-red-800 mt-2">{errors.editor}</p>}
                     </div>
                 </div>
             </div>
@@ -400,7 +418,7 @@ export default function CreateBlogPage() {
             {/* Submit Error */}
             {errors.submit && (
                 <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-md">
-                    <p className="text-sm text-destructive">{errors.submit}</p>
+                    <p className="text-sm text-red-800">{errors.submit}</p>
                 </div>
             )}
 

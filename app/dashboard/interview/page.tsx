@@ -1,8 +1,13 @@
+import InterviewClient from "@/components/common/interview/InterviewClient";
+import { decoded } from "@/utils/decoded";
+import { User } from "@prisma/client";
 
-export default function InterviewPage() {
+export default async function InterviewPage() {
+
+    const user = (await decoded()) as User | null;
+    
+
     return (
-        <div>
-            <h1>Interview Page</h1>
-        </div>
+        <InterviewClient user = {user}/>
     )
 }

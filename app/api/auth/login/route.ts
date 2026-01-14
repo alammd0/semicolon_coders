@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: Request) {
     try{
 
         const { email, password } = await request.json();
@@ -61,7 +61,7 @@ export async function POST(request: Request, response: Response) {
         }
 
         const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
-            expiresIn : "1h"
+            expiresIn : "7d"
         })
 
         const response = NextResponse.json({

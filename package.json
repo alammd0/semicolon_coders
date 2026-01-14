@@ -9,6 +9,7 @@
     "lint": "eslint",
     "seed": "tsx utils/seed.ts"
   },
+  
   "dependencies": {
     "@editorjs/code": "^2.9.4",
     "@editorjs/editorjs": "^2.31.1",
