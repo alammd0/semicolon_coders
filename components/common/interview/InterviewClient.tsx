@@ -3,10 +3,9 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { QuestionDetails } from "@/utils/type";
+import { QuestionDetails, User } from "@/utils/type";
 import { toast } from "react-toastify";
 import QuestionCard from "./QuestionCard";
-import { User } from "@prisma/client";
 
 export default function InterviewClient({ user } : { user : User | null }) {
 
