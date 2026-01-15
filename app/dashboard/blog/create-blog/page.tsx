@@ -33,41 +33,39 @@ export default function CreateBlogPage() {
     useEffect(() => {
         if (!mounted || editorRef.current) return;
 
-        let editor ;
+        const init = async () => {
+            const EditorJS = (await import("@editorjs/editorjs")).default;
+            const Header = (await import("@editorjs/header")).default;
+            const Paragraph = (await import("@editorjs/paragraph")).default;
+            const List = (await import("@editorjs/list")).default;
+            const Code = (await import("@editorjs/code")).default;
+            const Quote = (await import("@editorjs/quote")).default;
+            const Table = (await import("@editorjs/table")).default;
+            const ImageTool = (await import("@editorjs/image")).default;
 
-        (
-            async () => {
-                const EditorJS = (await import("@editorjs/editorjs")).default;
-                const Header = (await import("@editorjs/header")).default;
-                const Paragraph = (await import("@editorjs/paragraph")).default;
-                const List = (await import("@editorjs/list")).default;
-                const Code = (await import("@editorjs/code")).default;
-                const Quote = (await import("@editorjs/quote")).default;
-                const Table = (await import("@editorjs/table")).default;
-                const ImageTool = (await import("@editorjs/image")).default;
+            editorRef.current = new EditorJS({
+                holder: "editorjs",
+                autofocus: true,
+                placeholder: "Start writing your blog...",
+                tools: {
+                    header: Header,
+                    paragraph: Paragraph,
+                    list: List,
+                    code: Code,
+                    quote: Quote,
+                    table: Table,
+                    image: ImageTool,
+                },
+            });
+        };
 
-                editor = new EditorJS({
-                    holder: "editorjs",
-                    autofocus: true,
-                    placeholder: "Start writing your blog...",
-                    tools: {
-                        header: Header,
-                        paragraph: Paragraph,
-                        list: List,
-                        code: Code,
-                        quote: Quote,
-                        table: Table,
-                        image: ImageTool,
-                    },
-                });
-            }
-        )
+        init();
 
         return () => {
-            editorRef.current?.destroy()
-            editorRef.current = null
-        }
-    }, [])
+            editorRef.current?.destroy();
+            editorRef.current = null;
+        };
+    }, [mounted])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
