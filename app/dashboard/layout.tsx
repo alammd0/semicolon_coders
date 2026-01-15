@@ -1,10 +1,8 @@
 "use client";
 
-import { User } from "@prisma/client";
 import { Bell, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import jwt from "jsonwebtoken"
 
 
 
