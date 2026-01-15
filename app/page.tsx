@@ -147,7 +147,6 @@ export default function Home() {
           </div>
         </section>
 
-
          {/* Final CTA */}
         <section className="py-24 max-w-10/12 mx-auto">
           <div className="container mx-auto px-4">
