@@ -3,11 +3,11 @@ import Image from "next/image"
 import Link from "next/link"
 import ProfileDropdown from "./ProfileDropdown";
 import { decoded } from "@/utils/decoded";
-import { User } from "@/utils/type";
+import { UserType } from "@/utils/type";
 
 export default async function Navbar() {
 
-    const user : User | null = await decoded();
+    const user : UserType | null = await decoded();
 
     const isActive = (path: string) => typeof window !== "undefined" && window.location.pathname === path
 
@@ -49,7 +49,7 @@ export default async function Navbar() {
                             </div>
                          : 
                             <div className="hidden items-center gap-3 md:flex">
-                                <ProfileDropdown user={user as User}/>
+                                <ProfileDropdown user={user}/>
                             </div>
                     }
 

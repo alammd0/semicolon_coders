@@ -108,9 +108,7 @@ export async function POST(request: Request) {
                 },
             }
         });
-
-        console.log("Hit here - 03")
-
+        
         return NextResponse.json({
             message : "Blog created successfully",
             blog

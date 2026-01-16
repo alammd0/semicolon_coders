@@ -8,22 +8,20 @@ datasource db {
 
 // this is User model
 model User {
-  id         Int      @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   firstName  String
-  lastName   String
-  email      String   @unique
-  password   String
-  otp        String
-  expiresAt  DateTime @default(now())
-  role       Role     @default(user)
-  isVerified Boolean  @default(false)
-
-  blog     Blog[]
-  question Question[]
-  course   Course[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  lastName   String?
+  email      String     @unique
+  password   String?
+  otp        String?
+  expiresAt  DateTime?
+  role       Role       @default(user)
+  isVerified Boolean    @default(false)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  blogs      Blog[]
+  courses    Course[]
+  questions  Question[]
 }
 
 // this is Blog model

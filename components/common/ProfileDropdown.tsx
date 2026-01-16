@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { User } from "@/utils/type";
+import { UserType } from "@/utils/type";
 
 
-export default function ProfileDropdown({ user }: { user: User }) {
+export default function ProfileDropdown({ user }: { user: UserType }) {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
     const dropdownRef = useRef<HTMLDivElement>(null);

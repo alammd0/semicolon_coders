@@ -1,16 +1,18 @@
 
 
-export interface User {
+
+export interface UserType {
     id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    otp: string;
-    expiresAt: Date;
     role: string;
+    email: string;
+    password: string | null;
+    firstName: string;
+    lastName: string | null;
+    otp: string | null;
+    expiresAt: Date | null;
     isVerified: boolean;
     createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface Question {
@@ -25,6 +27,38 @@ export interface Question {
     codeSnippet: string;
     published: boolean;
     createdAt: Date;
+}
+
+
+export interface course {
+    id : number;
+    courseName : string;
+    courseDescription : string;
+    courseDuration : string;
+    courseLevel : string;
+    coverImage : string;
+    category : string;
+    slug : string;
+    section : section[];
+    createdAt : Date;
+}
+
+export interface section {
+    id : number;
+    sectionName : string;
+    sectionDescription : string;
+    subsection : subsection[];
+    slug : string;
+    createdAt : Date;
+}
+
+export interface subsection {
+    id : number;
+    subsectionName : string;
+    slug : string;
+    content : string;
+    video : string;
+    createdAt : Date;
 }
 
 export interface QuestionDetails{
