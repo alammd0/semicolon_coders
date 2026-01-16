@@ -6,86 +6,129 @@ datasource db {
   provider = "postgresql"
 }
 
+// this is User model
 model User {
-  id        Int    @id @default(autoincrement())
-  firstName String
-  lastName  String
-  email     String @unique
-  password  String
-
-  otp       String
-  expiresAt DateTime @default(now())
-
-  role      Role    @default(user)
-
+  id         Int      @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  email      String   @unique
+  password   String
+  otp        String
+  expiresAt  DateTime @default(now())
+  role       Role     @default(user)
   isVerified Boolean  @default(false)
 
-  blog      Blog[]
-  question  Question[]
+  blog     Blog[]
+  question Question[]
+  course   Course[]
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
+// this is Blog model
 model Blog {
-  id          String   @id @default(uuid())
-  title       String
-  slug        String   @unique
-  excerpt     String?
-  content     Json
-
-  coverImage  String? 
-
-  published   Boolean  @default(false)
-  views       Int      @default(0)
-
+  id              String  @id @default(uuid())
+  title           String
+  slug            String  @unique
+  excerpt         String?
+  content         Json
+  coverImage      String?
+  published       Boolean @default(false)
+  views           Int     @default(0)
   metaTitle       String?
   metaDescription String?
+  postTags        Tag[]
 
-  postTags    Tag[]
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
-  userId      Int
-  user        User   @relation(fields: [userId], references: [id])
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Tag {
-  id        Int    @id @default(autoincrement())
-  name      String @unique
-
-  blog      Blog[]  
-  question  Question[]
+  id       Int        @id @default(autoincrement())
+  name     String     @unique
+  blog     Blog[]
+  question Question[]
+  course   Course?    @relation(fields: [courseId], references: [id])
+  courseId Int?
 }
 
 // 2. Course 
+model Course {
+  id                Int       @id @default(autoincrement())
+  courseName        String
+  courseDescription String
+  courseDuration    String
+  courseLevel       String
+  tags              Tag[]
+  coverImage        String?
+  category          String
+  slug              String    @unique
+  section           Section[]
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Section {
+  id                 Int          @id @default(autoincrement())
+  sectionName        String
+  sectionDescription String
+  subsection         Subsection[]
+  slug               String       @unique
+
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subsection {
+  id             Int     @id @default(autoincrement())
+  subsectionName String
+  slug           String  @unique
+  content        Json
+  video          String?
+
+  section   Section? @relation(fields: [sectionId], references: [id])
+  sectionId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 // 3. Jobs
- 
+
 // 4. Question for interview 
 model Question {
-  id        Int    @id @default(autoincrement())
-  title       String
-  question    String
-  answer      String
-  difficulty  String
-  category    String
-  experience  String
-  tags        Tag[]
+  id         Int    @id @default(autoincrement())
+  title      String
+  question   String
+  answer     String
+  difficulty String
+  category   String
+  experience String
+  tags       Tag[]
 
   codeSnippet String?
   output      String?
 
-  slug        String   @unique
-  published   Boolean  @default(false)
+  slug      String  @unique
+  published Boolean @default(false)
 
-  userId      Int
-  user        User   @relation(fields: [userId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
 
 enum Role {
   user

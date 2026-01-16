@@ -6,8 +6,8 @@ export const NavbarData = [
     }, 
     {
         id : 2,
-        label : "Videos",
-        link : "/videos"
+        label : "Courses",
+        link : "/course"
     },
     {
         id : 3,

@@ -123,7 +123,7 @@ export default function QuestionFrom(){
     }}
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-12xl mx-auto">
             <div className="border rounded-md shadow-xl shadow-[#F9C505]/20 border-gray-400">
                 <div className="border-b py-4 px-6">
                     <h2 className="text-2xl font-bold">Create New Question</h2>
