@@ -5,14 +5,15 @@ CREATE TYPE "Role" AS ENUM ('user', 'admin');
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "firstName" TEXT NOT NULL,
-    "lastName" TEXT NOT NULL,
+    "lastName" TEXT,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL,
-    "otp" TEXT NOT NULL,
-    "expiresAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "password" TEXT,
+    "otp" TEXT,
+    "expiresAt" TIMESTAMP(3),
     "role" "Role" NOT NULL DEFAULT 'user',
     "isVerified" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -40,8 +41,53 @@ CREATE TABLE "Blog" (
 CREATE TABLE "Tag" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "courseId" INTEGER,
 
     CONSTRAINT "Tag_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Course" (
+    "id" SERIAL NOT NULL,
+    "courseName" TEXT NOT NULL,
+    "courseDescription" TEXT NOT NULL,
+    "courseDuration" TEXT NOT NULL,
+    "courseLevel" TEXT NOT NULL,
+    "coverImage" TEXT,
+    "category" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Course_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Section" (
+    "id" SERIAL NOT NULL,
+    "sectionName" TEXT NOT NULL,
+    "sectionDescription" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "courseId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Section_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Subsection" (
+    "id" SERIAL NOT NULL,
+    "subsectionName" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "content" JSONB NOT NULL,
+    "video" TEXT,
+    "sectionId" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Subsection_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -90,6 +136,15 @@ CREATE UNIQUE INDEX "Blog_slug_key" ON "Blog"("slug");
 CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Course_slug_key" ON "Course"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Section_slug_key" ON "Section"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Subsection_slug_key" ON "Subsection"("slug");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Question_slug_key" ON "Question"("slug");
 
 -- CreateIndex
@@ -100,6 +155,18 @@ CREATE INDEX "_QuestionToTag_B_index" ON "_QuestionToTag"("B");
 
 -- AddForeignKey
 ALTER TABLE "Blog" ADD CONSTRAINT "Blog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Tag" ADD CONSTRAINT "Tag_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Course" ADD CONSTRAINT "Course_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Section" ADD CONSTRAINT "Section_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Subsection" ADD CONSTRAINT "Subsection_sectionId_fkey" FOREIGN KEY ("sectionId") REFERENCES "Section"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Question" ADD CONSTRAINT "Question_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

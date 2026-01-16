@@ -1,13 +1,13 @@
 "use client";
 
 import CardSection from "@/components/common/blog/CardSection";
-import { User } from "@/utils/type";
+import { UserType } from "@/utils/type";
 import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 
-export default function BlogClient({ user }: { user: User | null }) {
+export default function BlogClient({ user }: { user: UserType | null }) {
 
     const [blogs, setBlogs] = useState<any[]>([]);
 

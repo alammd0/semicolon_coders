@@ -3,7 +3,7 @@ import BlogClient from "@/components/common/blog/BlogClient";
 
 export default async function BlogPage() {
   
-  const user = await decoded();
+  const User = await decoded();
 
-  return <BlogClient user={user} />;
+  return <BlogClient user={User} />;
 }

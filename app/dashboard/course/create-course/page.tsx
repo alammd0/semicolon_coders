@@ -1,7 +1,10 @@
 "use client";
 
+import axios from "axios";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function CreateCourse() {
     const [courseData, setCourseData] = useState({
@@ -10,9 +13,13 @@ export default function CreateCourse() {
         courseDuration: "",
         courseLevel: "beginner", 
         tags: [] as string[],
-        coverImage: "" as string,
+        coverImage: "" as File | string,
         category: "",
     });
+
+    const [previewImage, setPreviewImage] = useState<string>("");
+
+    const router = useRouter()
 
     const [tagInput, setTagInput] = useState("");
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -40,7 +47,7 @@ export default function CreateCourse() {
             newErrors.tags = "At least one tag is required";
         }
 
-        if (!courseData.coverImage.trim()) {
+        if (!courseData.coverImage) {
             newErrors.coverImage = "Cover image is required";
         }
 
@@ -69,26 +76,22 @@ export default function CreateCourse() {
         if (!file) return;
 
         if (!file.type.startsWith("image/")) {
-            setErrors((prev) => ({ ...prev, coverImage: "Please select a valid image" }));
+            alert("Only images allowed");
             return;
         }
 
         if (file.size > 2 * 1024 * 1024) {
-            setErrors((prev) => ({ ...prev, coverImage: "Image must be less than 2MB" }));
+            alert("Image must be under 2MB");
             return;
         }
 
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-            setCourseData((prev) => ({
-                ...prev,
-                coverImage: reader.result as string,
-            }));
-        };
-
-        reader.readAsDataURL(file);
+        setCourseData((prev) => ({
+            ...prev,
+            coverImage: file, 
+        }));
+        setPreviewImage(URL.createObjectURL(file));
     };
+
 
     const addTag = () => {
         if (tagInput.trim() && !courseData.tags.includes(tagInput.trim())) {
@@ -107,12 +110,40 @@ export default function CreateCourse() {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log("Course data:", courseData);
-        } else {
-            console.log("Form validation failed");
+
+            const formData = new FormData();
+            formData.append("courseName", courseData.courseName);
+            formData.append("courseDescription", courseData.courseDescription);
+            formData.append("courseDuration", courseData.courseDuration);
+            formData.append("courseLevel", courseData.courseLevel);
+            formData.append("category", courseData.category);
+
+            // tags
+            courseData.tags.forEach((tag) => {
+                formData.append("tags", tag);
+            });
+
+            // coverImage
+            formData.append("coverImage", courseData.coverImage);
+
+            try {
+
+                const response = await axios.post("/api/course", formData);
+
+                if(response.status === 201){
+                    toast.success(response.data.message);
+                    router.push("/dashboard/course");
+                }else{
+                    toast.error(response.data.message);
+                }
+            }
+            catch(error){
+                const errorMessage = error instanceof Error ? error.message : "An error occurred";
+                toast.error(errorMessage);
+            }
         }
     };
 
@@ -197,21 +228,22 @@ export default function CreateCourse() {
                                 }
                                 />
                                 {errors.coverImage && <p className="text-sm text-red-800">{errors.coverImage}</p>}
-                                {courseData.coverImage && (
+                                {previewImage && (
                                     <div className="relative w-full">
                                         <img
-                                            src={courseData.coverImage}
+                                            src={previewImage}
                                             alt="Cover preview"
                                             className="w-full h-64 object-cover rounded-md border border-border"
                                         />
                                         <button
                                             type="button"
-                                            onClick={() =>
+                                            onClick={() => {
                                                 setCourseData((prevState) => ({
                                                     ...prevState,
                                                     coverImage: "",
-                                                }))
-                                            }
+                                                }));
+                                                setPreviewImage("");
+                                            }}
                                             className="absolute top-2 right-2 bg-destructive text-destructive-foreground px-3 py-1 rounded text-sm font-medium hover:opacity-90"
                                         >
                                             Remove

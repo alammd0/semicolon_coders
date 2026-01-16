@@ -9,7 +9,6 @@ export async function POST(request: Request) {
 
         const { email, password } = await request.json();
         
-
         if(!email || !password){
             return NextResponse.json({
                 error : "Email or password is missing",
@@ -43,7 +42,7 @@ export async function POST(request: Request) {
             })
         }
 
-        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        const isPasswordCorrect = await bcrypt.compare(password, user.password as string);
 
         if(!isPasswordCorrect){
             return NextResponse.json({

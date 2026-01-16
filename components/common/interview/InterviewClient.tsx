@@ -3,11 +3,11 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { QuestionDetails, User } from "@/utils/type";
+import { QuestionDetails, UserType } from "@/utils/type";
 import { toast } from "react-toastify";
 import QuestionCard from "./QuestionCard";
 
-export default function InterviewClient({ user } : { user : User | null }) {
+export default function InterviewClient({ user } : { user : UserType | null }) {
 
     const [questions, setQuestions] = useState<QuestionDetails[]>([]);
     const [isLoading, setIsLoading] = useState(false);
