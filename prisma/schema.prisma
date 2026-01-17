@@ -80,7 +80,7 @@ model Section {
   sectionDescription String
   subsection         Subsection[]
   slug               String       @unique
-
+  
   courseId Int
   course   Course @relation(fields: [courseId], references: [id])
 

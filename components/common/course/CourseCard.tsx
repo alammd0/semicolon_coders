@@ -61,7 +61,7 @@ export default function CourseCard( {courses} : { courses : course[] }) {
 
                                 <div className="mt-6 flex items-center justify-between">
                                     <span className="text-sm font-medium text-muted-foreground flex items-center justify-center gap-2"> <Book className="h-5 w-4"/> {course.section.length} sections</span>
-                                    <Link href={`/courses/${course.slug}`}>
+                                    <Link href={`/course/${course.slug}`}>
                                         <button
                                             className="rounded-md bg-[#F9C505] py-2 px-4 text-sm text-white shadow-sm transition-all hover:shadow-lg hover:cursor-pointer"
                                         >
