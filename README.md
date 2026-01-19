@@ -50,11 +50,7 @@ To get a local copy up and running, follow these simple steps.
     ```sh
     pnpm run dev
     ```
-
-## 📸 Screenshots
-
-*Add your screenshots here. You can embed images using the following markdown:*
-
+    
 ## 📸 Screenshots
 
 ![Home Page](./screenshot/Home.png)
