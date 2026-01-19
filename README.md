@@ -55,12 +55,13 @@ To get a local copy up and running, follow these simple steps.
 
 *Add your screenshots here. You can embed images using the following markdown:*
 
-```markdown
-![Home Page](/screenshot/Home.png)
-![Course Dashboard](/screenshot/Course.png)
-![Course Page](/screenshot/Course.png)
-![Content Page](/screenshot//Content.png)
-```
+## 📸 Screenshots
+
+![Home Page](./screenshot/Home.png)
+![Course Dashboard](./screenshot/Course.png)
+![Course Page](./screenshot/Course.png)
+![Content Page](./screenshot/Content.png)
+
 
 ## 📂 Project Structure
 
