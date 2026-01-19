@@ -262,7 +262,7 @@ export default function CreateBlogPage() {
                     </div>
                 </div>
 
-                  {/* Cover Image */}
+                {/* Cover Image */}
                 <div className="border p-4 rounded-md shadow-xl shadow-[#F9C505]/20 border-gray-400">
                     {/* card header */}
                     <div className="mb-8">

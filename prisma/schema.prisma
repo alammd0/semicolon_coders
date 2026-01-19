@@ -80,7 +80,7 @@ model Section {
   sectionDescription String
   subsection         Subsection[]
   slug               String       @unique
-  
+
   courseId Int
   course   Course @relation(fields: [courseId], references: [id])
 
@@ -89,20 +89,32 @@ model Section {
 }
 
 model Subsection {
-  id             Int     @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   subsectionName String
-  slug           String  @unique
-  content        Json
-  video          String?
+  slug           String   @unique
+  content        Content?
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sectionId Int
   section   Section? @relation(fields: [sectionId], references: [id])
-  sectionId Int?
+}
+
+model Content {
+  id       Int     @id @default(autoincrement())
+  body     Json
+  videoUrl String?
+
+  subsectionId Int @unique
+  subsection   Subsection @relation(fields: [subsectionId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 // 3. Jobs
+
 
 // 4. Question for interview 
 model Question {
