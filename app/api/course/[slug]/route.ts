@@ -7,6 +7,8 @@ export async function GET(request :NextRequest, {  params } : { params : Promise
 
         const { slug } = await params;
 
+        console.log(slug);
+
         const course = await prisma.course.findUnique({
             where : {
                 slug : slug
@@ -19,6 +21,7 @@ export async function GET(request :NextRequest, {  params } : { params : Promise
                 section : {
                     select : {
                         sectionName : true,
+                        sectionDescription : true,
                         slug : true,
                         subsection : {
                             select : {

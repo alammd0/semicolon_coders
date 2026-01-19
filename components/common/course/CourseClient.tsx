@@ -42,8 +42,10 @@ export default function CourseClient({ user }  : { user : UserType | null }) {
 
     if(loading){
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary" />
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="loader">
+
+                </div>
             </div>
         )
     }
@@ -63,7 +65,7 @@ export default function CourseClient({ user }  : { user : UserType | null }) {
                     <Link href="/dashboard/course/create-course">
                         <button className="flex items-center gap-2 rounded-lg bg-[#F9C505] px-4 py-2 text-sm transition-colors hover:bg-muted text-[14px] font-bold hover:text-white hover:shadow-lg shadow-gray-300 cursor-pointer">
                             <Plus className="h-4 w-4" />
-                            Create Blog
+                            Create Course
                         </button>
                     </Link> : null
                 }
