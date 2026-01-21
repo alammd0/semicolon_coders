@@ -27,6 +27,12 @@ export async function GET(request :NextRequest, {  params } : { params : Promise
                             select : {
                                 subsectionName : true,
                                 slug : true,
+                                content : {
+                                    select : {
+                                        body : true,
+                                        videoUrl : true
+                                    }
+                                },
                             }
                         }
                     },

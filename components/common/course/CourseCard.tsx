@@ -1,11 +1,12 @@
-import { course } from "@/utils/type";
+"use client";
+
+import { course, UserType } from "@/utils/type";
 import Link from "next/link";
 import Image from "next/image";
 import { Book } from "lucide-react";
 
-
-export default function CourseCard( {courses} : { courses : course[] }) {
-
+export default function CourseCard( {courses, user} : { courses : course[], user : UserType | null}) {
+    
     const levelConfigs = {
         Beginner: {
             label: "Beginner",
@@ -21,6 +22,7 @@ export default function CourseCard( {courses} : { courses : course[] }) {
         }
     };
 
+    const getCourseLink = (role: string | undefined, slug: string) => role === "admin" ? `/dashboard/course/${slug}` : `/course/${slug}`;
 
     return (
         <div>
@@ -61,7 +63,7 @@ export default function CourseCard( {courses} : { courses : course[] }) {
 
                                 <div className="mt-6 flex items-center justify-between">
                                     <span className="text-sm font-medium text-muted-foreground flex items-center justify-center gap-2"> <Book className="h-5 w-4"/> {course.section.length} sections</span>
-                                    <Link href={`/dashboard/course/${course.slug}`}>
+                                    <Link href={getCourseLink(user?.role, course.slug)}>
                                         <button
                                             className="rounded-md bg-[#F9C505] py-2 px-4 text-sm text-white shadow-sm transition-all hover:shadow-lg hover:cursor-pointer"
                                         >

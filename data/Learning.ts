@@ -1,4 +1,3 @@
-import { link } from "fs";
 import { Briefcase, Code, GraduationCap } from "lucide-react";
 
 export const LearningData = [

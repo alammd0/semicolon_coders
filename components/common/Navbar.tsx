@@ -7,8 +7,7 @@ import { UserType } from "@/utils/type";
 
 export default async function Navbar() {
 
-    const user : UserType | null = await decoded();
-
+    const user = await decoded() as UserType;
     const isActive = (path: string) => typeof window !== "undefined" && window.location.pathname === path
 
     return (
@@ -52,7 +51,6 @@ export default async function Navbar() {
                                 <ProfileDropdown user={user}/>
                             </div>
                     }
-
                 </div>
             </div>
         </nav>  
