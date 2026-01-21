@@ -11,11 +11,10 @@ export const decoded = async () => {
         try{
             const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string) as User;
             user = decodedToken;
+            return user;
         }   
         catch(error){
             user = null
         }
     }
-
-    return user;
 }

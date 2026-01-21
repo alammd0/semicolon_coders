@@ -14,6 +14,8 @@ export default function CourseClient({ user }  : { user : UserType | null }) {
     const [courses, setCourses] = useState<course[]>([]);
     const [loading, setLoading] = useState(true);
 
+    console.log(user);
+
     useEffect( () => {
         const fetchData = async () => {
             try {
@@ -44,7 +46,6 @@ export default function CourseClient({ user }  : { user : UserType | null }) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="loader">
-
                 </div>
             </div>
         )
@@ -74,7 +75,7 @@ export default function CourseClient({ user }  : { user : UserType | null }) {
             {/* Here Implement the Blogs List */}
             {/* Card Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                <CourseCard courses={courses}/>
+                <CourseCard courses={courses} user={ user }/>
             </div>
        </div>
     )

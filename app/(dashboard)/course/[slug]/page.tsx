@@ -19,6 +19,10 @@ interface course {
         subsection : {
             subsectionName : string,
             slug : string,
+            content : {
+                body : JSON,
+                videoUrl : string
+            },
         }[]
     }[],
     createdAt : Date,
@@ -71,22 +75,24 @@ export default function CourseSlugPage() {
 
     if(loading){
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-primary" />
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="loader">
+
+                </div>
             </div>
         )
     }
 
     return (
         <div className="flex h-screen overflow-hidden bg-background">
+
             {
                 course && <CourseSidebar 
-                    course={course}
-                    selectedSection={selectedSection}
-                    selectedSubsection={selectedSubsection}
-                    setSelectedSection={setSelectedSection}
-                    setSelectedSubsection={setSelectedSubsection}
-                    
+                        course={course}
+                        selectedSection={selectedSection}
+                        selectedSubsection={selectedSubsection}
+                        setSelectedSection={setSelectedSection}
+                        setSelectedSubsection={setSelectedSubsection}
                     />
             }
 
