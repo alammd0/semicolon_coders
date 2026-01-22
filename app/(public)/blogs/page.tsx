@@ -16,7 +16,7 @@ export default function BlogsPage(){
         const fetchData = async () => {
             try{
                 setLoading(true);
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOCAL}/blogs?populate=*`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/blogs?populate=*`);
 
                 if (response.status === 200) {
                     setBlogs(response.data.data);
@@ -54,9 +54,7 @@ export default function BlogsPage(){
                 <p className="mt-4 text-lg text-muted-foreground">Master new skills with our comprehensive collection of courses and tutorials</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                <CardSection blogs={blogs}/>
-            </div>
+            <CardSection blogs={blogs} />
        </div>
     )
 }

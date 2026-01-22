@@ -16,8 +16,9 @@ import { timeFormat } from "@/lib/timeFormat";
 
 
 export default function CardSection({ blogs }: { blogs: any[] }) {
+
     return (
-        <div>
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {
                 blogs.map((blog, index) => {
                     return <Card key={index} className="group relative mx-auto w-full overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
