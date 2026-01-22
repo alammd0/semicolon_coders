@@ -16,7 +16,7 @@ export default function BlogsPage(){
         const fetchData = async () => {
             try{
                 setLoading(true);
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOCAL}/blogs?populate=*`);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL}/blogs?populate=*`);
 
                 if (response.status === 200) {
                     setBlogs(response.data.data);

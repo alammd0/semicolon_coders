@@ -22,7 +22,7 @@ export default function BlogDetailsPage() {
 
         const fetchBlog = async () => {
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOCAL}/blogs?filters[slug][$eq]=${slug}&populate=*`)
+                const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/blogs?filters[slug][$eq]=${slug}&populate=*`)
                 const json = await res.json()
 
                 if (!json.data?.length) {
