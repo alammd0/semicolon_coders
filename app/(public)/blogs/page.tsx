@@ -3,39 +3,49 @@
 
 import CardSection from "@/components/common/blog/CardSection";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 
 export default function BlogsPage(){
 
     const [blogs, setBlogs] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try{
+                setLoading(true);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOCAL}/blogs?populate=*`);
 
-                const response = await fetch("/api/blog", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-
-                const data = await response.json();
-
-                if(data.message === "Blogs fetched successfully"){
-                    setBlogs(data.blogs);
+                if (response.status === 200) {
+                    setBlogs(response.data.data);
+                    toast.success("Blogs fetched successfully");
+                    setLoading(false);
                 }
                 else{
-                    console.error("Error fetching data:", data.message);
+                    console.error("Error fetching data:", response.data.message);
+                    setLoading(false);
                 }
             }
             catch(error){
                 console.error("Error fetching data:", error);
+                setLoading(false);
             }
         }
 
         fetchData();
+
     }, []);
+
+    if(loading){
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="loader">
+                </div>
+            </div>
+        )
+    }
 
     return (
        <div className="max-w-11/12 mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-10">
