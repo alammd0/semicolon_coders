@@ -1,12 +1,15 @@
 
+export function getReadingTime(content: string) {
+    if (!content) return "0 min read"
 
-export const getReadingTime = (content: any) => {
-    const words = content.blocks.map((block: any) => {
-        if (block.data?.text) {
-                return block.data.text.replace(/<[^>]+>/g, "").split(" ").length
-            }
-            return 0
-        }).reduce((a: number, b: number) => a + b, 0)
+    // Remove HTML tags (important for rich text)
+    const plainText = content.replace(/<[^>]+>/g, "")
 
-  return Math.ceil(words / 200)
+    // Count words
+    const words = plainText.trim().split(/\s+/).length
+
+    // Calculate reading time
+    const minutes = Math.ceil(words / 200)
+
+    return `${minutes} min read`
 }
