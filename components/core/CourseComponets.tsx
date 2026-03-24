@@ -16,27 +16,25 @@ export default function CourseComponents({ user } : { user : UserType }) {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get("/api/course");
+                const response =  await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOCAL}/courses?populate=*`);
 
-                if(response.data.error){
-                    toast.error("Error fetching data");
+                if (response.status === 200){
+                    setCourses(response.data.data);
+                    toast.success("Courses fetched successfully");
+                    setLoading(false)
+                } else{
+                    toast.warning("Error fetching courses");
                     setLoading(false);
-                    return;
                 }
-                
-                setCourses(response.data.course);
-                toast.success("Courses fetched successfully");
-                setLoading(false)
             }
             catch(error){
-                console.error("Error fetching data:", error);
-                toast.error("Error fetching data");
-                setLoading(false);
+                setLoading(false)
             }
         }
         fetchData();
     }, []);
 
+    console.log(courses);
 
     if(loading){
         return (

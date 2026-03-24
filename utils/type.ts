@@ -32,14 +32,21 @@ export interface Question {
 
 export interface course {
     id : number;
-    courseName : string;
-    courseDescription : string;
+    title : string;
+    description : string;
     courseDuration : string;
     courseLevel : string;
-    coverImage : string;
-    category : string;
+    thumbnail : thumbnail;
+    price : string;
+    Keyword :string;
     slug : string;
-    section : section[];
+    sections : section[];
+    createdAt : Date;
+}
+
+export interface thumbnail {
+    id : number;
+    url : string;
     createdAt : Date;
 }
 
