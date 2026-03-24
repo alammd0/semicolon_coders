@@ -6,5 +6,7 @@ export default async function CoursePage() {
 
     const user = await decoded() as UserType;
 
-    return <CourseComponents user = {user}/>
+    return(
+        <CourseComponents user = {user}/>
+    )
 }
