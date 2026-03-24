@@ -1,11 +1,14 @@
 import BlogDetailsComponents from "@/components/common/blog/BlogDetailsComponents";
+import { decoded } from "@/utils/decoded";
+import { UserType } from "@/utils/type";
 
-export default function BlogDetailsPage() {
+export default async function BlogDetailsPage() {
 
+    const user = await decoded() as UserType;
 
     return (
         <div>
-            <BlogDetailsComponents />
+            <BlogDetailsComponents user = {user}/>
         </div>
     )
 }

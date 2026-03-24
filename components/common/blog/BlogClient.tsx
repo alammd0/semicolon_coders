@@ -2,42 +2,55 @@
 
 import CardSection from "@/components/common/blog/CardSection";
 import { UserType } from "@/utils/type";
+import axios from "axios";
 import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 
 export default function BlogClient({ user }: { user: UserType | null }) {
 
     const [blogs, setBlogs] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try{
+                setLoading(true);
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOCAL}`+`/blogs?populate=*`);
 
-                const response = await fetch("/api/blog", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
+                console.log(response)
 
-                const data = await response.json();
-
-                if(data.message === "Blogs fetched successfully"){
-                    setBlogs(data.blogs);
-                }
-                else{
-                    console.error("Error fetching data:", data.message);
+                if (response.status === 200) {
+                    setBlogs(response.data.data);
+                    toast.success("Blogs fetched successfully");
+                    setLoading(false);
+                }else{
+                    toast.error("Error fetching data");
+                    setLoading(false);
                 }
             }
             catch(error){
-                console.error("Error fetching data:", error);
+                toast.error("Error fetching data");
+                setLoading(false);
             }
         }
 
         fetchData();
     }, []);
+
+    // console.log(blogs)
+
+
+    if(loading){
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="loader">
+                </div>
+            </div>
+        )
+    }
 
     return (
        <div className="mx-auto max-w-12xl sm:px-2 lg:px-2">
@@ -50,23 +63,10 @@ export default function BlogClient({ user }: { user: UserType | null }) {
                         placeholder="Search blogs..."
                         className="w-full rounded-lg border border-border bg-card px-4 py-2 pl-12 text-card-foreground placeholder-muted-foreground transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50" />
                 </div>
-
-                {
-                    user?.role === "admin" ?
-                    <Link href="/dashboard/blog/create-blog">
-                        <button className="flex items-center gap-2 rounded-lg text-[#F9C505] px-4 py-2 text-sm transition-colors hover:bg-muted hover:text-[#F9C505]">
-                            <Plus className="h-4 w-4" />
-                            Create Blog
-                        </button>
-                    </Link> : null
-                }
             </div>
 
-            {/* Here Implement the Blogs List */}
             {/* Card Section */}
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                <CardSection blogs={blogs}/>
-            </div>
+            <CardSection blogs={blogs}/>
        </div>
     )
 }

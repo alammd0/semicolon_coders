@@ -6,9 +6,9 @@ import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { UserType } from "@/utils/type"
 
-export default function BlogDetailsPage() {
+export default function BlogDetailsPage({user}: {user: UserType}) {
 
     const { slug } = useParams<{ slug: string }>()
     const [blog, setBlog] = useState<any>(null)
@@ -16,13 +16,59 @@ export default function BlogDetailsPage() {
     const router = useRouter()
     const [error, setError] = useState(false)
 
+    // const [comment, setComment] = useState("")
+
+    // here create a function to create a comment
+    // const handleCommentSubmit = async (e : any) => {
+    //     e.preventDefault()
+
+    //     if(!user) {
+    //         toast.warning("Please login to comment this post")
+    //         router.push("/login")
+    //         return
+    //     }
+
+    //     if(!comment){
+    //         toast.warning("Please enter a comment")
+    //         return
+    //     }
+
+    //     try {
+
+    //         const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOCAL}/comments`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //         })
+
+    //         console.log(res)
+
+    //         const json = await res.json()
+
+    //         console.log("Here Gives ", json)
+
+    //         if(res.status === 201){
+    //             toast.success("Comment created successfully")
+    //             setComment("")
+    //         }
+    //         else{
+    //             toast.error(json.message)
+    //         }
+    //     }
+    //     catch(error){
+
+    //     }
+    // } 
+
+
     useEffect(() => {
 
         if (!slug) return
 
         const fetchBlog = async () => {
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/blogs?filters[slug][$eq]=${slug}&populate=*`)
+                const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL_LOCAL}`+`/blogs?filters[slug][$eq]=${slug}&populate=*`)
                 const json = await res.json()
 
                 if (!json.data?.length) {
@@ -56,7 +102,10 @@ export default function BlogDetailsPage() {
         </div>
     )
 
+    console.log(blog)
+
     const { title, content, publishedAt, coverImage } = blog
+
 
     return (
         <div className="mx-auto max-w-4xl mt-4">
@@ -92,9 +141,11 @@ export default function BlogDetailsPage() {
                   </div>
               )}
 
-            <div className="mb-4 flex items-center gap-3 text-sm text-muted-foreground">
-                  <Badge variant="secondary">Blog</Badge>
-                  <span>{new Date(publishedAt).toDateString()}</span>
+            <div className="mb-8 flex items-center justify-between gap-3 text-sm text-muted-foreground">
+                  <div className="flex gap-2 flex-col">
+                      <span>{new Date(publishedAt).toDateString()}</span>
+                  </div>
+                  <Badge variant="outline" className="capitalize leading-2.5 text-[16px] font-semibold">Author: {blog.author.username ? blog.author.username : "Unknown"}</Badge>
             </div>
 
             <div className="prose prose-lg max-w-none">
@@ -118,7 +169,27 @@ export default function BlogDetailsPage() {
                       remarkPlugins={[remarkGfm]}>{content}
                 </Markdown>
             </div>
+
           </article>
+
+          {/* Comments Section
+          <div className="mb-8 flex items-center justify-between gap-3 text-sm text-muted-foreground">
+              <Badge variant="secondary">Comments</Badge>
+              <span>0</span>
+          </div>
+
+          <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-3 text-sm text-muted-foreground">
+                  <Badge variant="secondary">Add a comment</Badge>
+              </div>
+              <form onSubmit={handleCommentSubmit} className="flex flex-col gap-4">
+                  <textarea
+                      onChange={(e) => setComment(e.target.value)} value={comment} placeholder="Your comment" className="w-full rounded-md bg-transparent py-2 px-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2" />
+                  <button type="submit" className="w-full rounded-md bg-primary-600 py-2 px-4 text-sm font-medium text-black hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2">
+                      Post
+                  </button>
+              </form>
+          </div>   */}
       </div>
     )
 }
