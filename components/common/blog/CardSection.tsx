@@ -17,6 +17,8 @@ import { timeFormat } from "@/lib/timeFormat";
 
 export default function CardSection({ blogs }: { blogs: any[] }) {
 
+    // console.log(blogs)
+
     return (
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {
@@ -28,11 +30,11 @@ export default function CardSection({ blogs }: { blogs: any[] }) {
                                 alt=""
                                 width={500}
                                 height={280}
-                                className="relative z-50 aspect-video w-full object-cover dark:brightness-40"
+                                className="relative z-50 aspect-video w-full object-cover dark:brightness-80"
                             />
 
                             {/* Overlay */}
-                            <div className="absolute inset-0 bg-[#F9C505]/40 transition-opacity duration-300 group-hover:bg-[F9C505]/55" />
+                            <div className="absolute inset-0 bg-[#F9C505]/40 transition-opacity duration-300 group-hover:bg-[#F9C505]/55" />
                         </div>
                         <CardHeader className="relative z-10 space-y-2">
 
